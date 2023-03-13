@@ -1,48 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Tauri App</title>
+    <link rel="stylesheet" href="/css/uikit.min.css">
+    <script type="module" src="/js/uikit.min.js"></script>
+    <script type="module" src="/js/uikit-icons.min.js"></script>
     <script type="module" src="/main.js" defer></script>
-    <style>
-      .logo.vanilla:hover {
-        filter: drop-shadow(0 0 2em #ffe21c);
-      }
-    </style>
-  </head>
+</head>
 
-  <body>
-    <div class="container">
-      <h1>Welcome to Tauri!</h1>
+<body>
+<div class="uk-flex uk-flex-center">
+    <div>
+        <div class="uk-alert" id="msg"></div>
+        <form style="width: 500px;">
+            <fieldset class="uk-fieldset">
 
-      <div class="row">
-        <a href="https://tauri.app" target="_blank">
-          <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-          target="_blank"
-        >
-          <img
-            src="/assets/javascript.svg"
-            class="logo vanilla"
-            alt="JavaScript logo"
-          />
-        </a>
-      </div>
+                <legend class="uk-legend">Config</legend>
 
-      <p>Click on the Tauri logo to learn more about the framework</p>
+                <div class="uk-margin">
+                    <input class="uk-input" type="text" placeholder="Input" aria-label="Input">
+                </div>
 
-      <div class="row">
-        <div>
-          <input id="greet-input" placeholder="Enter a name..." />
-          <button id="greet-button" type="button">Greet</button>
-        </div>
-      </div>
+                <div class="uk-margin">
+                    <select class="uk-select" aria-label="Select">
+                        <option>Option 01</option>
+                        <option>Option 02</option>
+                    </select>
+                </div>
 
-      <p id="greet-msg"></p>
+                <div class="uk-margin">
+                    <textarea class="uk-textarea" rows="5" placeholder="Textarea" aria-label="Textarea"></textarea>
+                </div>
+
+                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                    <label><input class="uk-radio" type="radio" name="radio2" checked> A</label>
+                    <label><input class="uk-radio" type="radio" name="radio2"> B</label>
+                </div>
+
+                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                    <label><input class="uk-checkbox" type="checkbox" checked> A</label>
+                    <label><input class="uk-checkbox" type="checkbox"> B</label>
+                </div>
+
+                <div class="uk-margin">
+                    <input class="uk-range" type="range" value="2" min="0" max="10" step="0.1" aria-label="Range">
+                </div>
+
+                <div class="uk-margin">
+                    <button class="uk-button uk-button-primary" id="submit">Submit</button>
+                </div>
+
+            </fieldset>
+        </form>
     </div>
-  </body>
+</div>
+</body>
 </html>
