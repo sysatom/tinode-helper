@@ -5,6 +5,9 @@ let msgEl;
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
   msgEl.textContent = await invoke("greet", { name: "demo" });
+
+  // demo
+  await invoke("demo");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
