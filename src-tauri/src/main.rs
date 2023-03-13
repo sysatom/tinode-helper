@@ -3,6 +3,7 @@
 
 use std::collections::HashMap;
 use reqwest;
+use serde_json;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -17,7 +18,7 @@ async fn demo() {
         .body(r#"{"action": "deckNames", "version": 6}"#)
         .send()
         .await.expect("error post")
-        .json::<HashMap<String, String>>() // fixme null value
+        .json::<HashMap<String, serde_json::Value>>()
         .await.expect("error json");
 
     println!("{res:?}");
