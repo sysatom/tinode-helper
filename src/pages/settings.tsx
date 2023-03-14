@@ -45,7 +45,7 @@ const SettingsPage = () => {
   const router = useRouter();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [notificationSetting, setNotificationSetting] = useState("no");
-  const [frequency, setFrequency] = useState([15]);
+  const [frequency, setFrequency] = useState([10]);
 
   // When mounted on client, now we can show the UI
   useEffect(() => {
@@ -91,7 +91,7 @@ const SettingsPage = () => {
               Theme
             </p>
             <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              How would you like BuildLog to look?
+              How would you like Helper to look?
             </p>
           </div>
           <RadioGroup
@@ -107,7 +107,7 @@ const SettingsPage = () => {
               Send Notifications
             </p>
             <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              Send system messages when deployment starts and ends.
+              Send system messages when actions.
             </p>
           </div>
           <RadioGroup
@@ -123,34 +123,49 @@ const SettingsPage = () => {
               Request Interval
             </p>
             <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              How frequently should BuildLog check for new deployments?
+              How frequently should Helper check for new action?
             </p>
           </div>
           <Slider
             max={60}
-            min={10}
-            step={5}
+            min={1}
+            step={1}
             label="Interval"
             value={frequency}
             handleChange={handleFrequencyChange}
           />
         </section>
+        <section className="flex items-center justify-between mt-8">
+          <div className="flex flex-col">
+            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+              Logging
+            </p>
+            <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
+              View all logs.
+            </p>
+          </div>
+          <Link href="/logs">
+            <button className="mr-2 bg-transparent hover:bg-zinc-200 hover:dark:bg-zinc-700 p-2 rounded">
+              view
+            </button>
+          </Link>
+        </section>
         <section className="mt-auto flex justify-between items-center p-4 border border-red-400 rounded bg-red-200/30 dark:bg-red-800/20">
           <div className="flex flex-col">
             <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
-              Log Out?
+              Stop?
             </p>
             <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              Log out of BuildLog and erase saved access token.
+              Stop of Helper and erase saved access url.
             </p>
           </div>
           <AlertDialog
             handleTriggerClick={handleClickLogout}
-            confirmLabel="Log out"
+            confirmLabel="Stop"
             show={showConfirmModal}
             title="Are you absolutely sure?"
-            description="You will be logged out and your access token will be deleted from local storage"
-            triggerLabel="Log out"
+            description="You will be stop and your access url will be deleted from local storage"
+            triggerLabel="Stop"
             handleConfirm={() => {
               localStorage.removeItem("token");
               setTimeout(() => {

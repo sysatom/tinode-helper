@@ -64,8 +64,8 @@ const Deployments = ({ selectedProject }: IDeploymentsProps) => {
       ) {
         inProgressDeployments[deployment.uid] = deployment;
         sendNotification({
-          title: "BuildLog",
-          body: `${deployment.name} - Deployment started`,
+          title: "Helper",
+          body: `${deployment.name} - Action started`,
         });
       } else if (
         deployment.state === "READY" &&
@@ -78,7 +78,7 @@ const Deployments = ({ selectedProject }: IDeploymentsProps) => {
           state = "❌ Failed";
         }
         sendNotification({
-          title: "BuildLog",
+          title: "Helper",
           body: `${deployment.name} - ${state}`,
         });
         delete inProgressDeployments[deployment.uid];
@@ -110,7 +110,7 @@ const Deployments = ({ selectedProject }: IDeploymentsProps) => {
     <section className="p-3 flex flex-col overflow-y-auto overflow-x-hidden hide_scrollbar h-full">
       <div className="flex justify-between items-center mb-2">
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-          Deployments
+          Bots
         </p>
         {(isLoading || isValidating) && (
           <UpdateIcon className="animate-spin text-zinc-400 dark:text-zinc-500 mr-3" />

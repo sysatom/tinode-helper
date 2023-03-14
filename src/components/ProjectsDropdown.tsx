@@ -44,7 +44,7 @@ const ProjectsDropdown = ({
     .flat();
 
   availableProjects?.splice(0, 0, {
-    label: "All Projects",
+    label: "All Bots",
     id: "",
   });
 

@@ -19,11 +19,10 @@ function Index() {
     <Fragment>
       <Header classes="flex-col">
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-1">
-          BuildLog
+          Helper
         </h1>
         <p className="text-sm font-normal text-zinc-700 dark:text-zinc-200">
-          Quickly displays your Vercel Deployments right in the menu bar for all
-          your projects
+          Quickly displays your bots right in the menu bar
         </p>
       </Header>
       <TokenRegistration />
