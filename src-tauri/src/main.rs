@@ -16,8 +16,7 @@ fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Helper");
     let tray_menu = SystemTrayMenu::new().add_item(quit);
     let system_tray = SystemTray::new()
-        .with_menu(tray_menu)
-        .with_menu_on_left_click(false);
+        .with_menu(tray_menu);
 
     tauri::Builder::default()
         .system_tray(system_tray)
