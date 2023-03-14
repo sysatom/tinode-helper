@@ -1,7 +1,17 @@
-# Tauri + Vanilla
+# Tinode-Helper
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.
+## Building
 
-## Recommended IDE Setup
+The app uses Tauri for bundling and creating the tray, while the frontend is written with Nextjs and Typescript.
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+`yarn dev`
+
+Runs just the Frontend Nextjs site, so you should be able to see it in the browser
+
+`yarn tauri dev`
+
+Makes it into a system tray
+
+`yarn build` and `yarn tauri build`
+
+Build the app for browser and desktop respectively
