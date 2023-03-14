@@ -33,7 +33,7 @@ const TokenRegistration = () => {
           htmlFor="token"
           className="text-sm font-normal text-zinc-900 dark:text-zinc-50"
         >
-          Vercel Personal Access Token
+          Tinode Bot Access Url
         </label>
         <input
           type="text"
@@ -46,7 +46,7 @@ const TokenRegistration = () => {
               ? "opacity-40 cursor-not-allowed"
               : "opacity-100 cursor-auto"
           }`}
-          placeholder="personal-access-token"
+          placeholder="access url"
           disabled={isSubmitting}
         />
         <button
@@ -70,15 +70,7 @@ const TokenRegistration = () => {
       </form>
 
       <p className="text-sm text-zinc-700 dark:text-zinc-300 mt-4">
-        Steps for creating a Personal Access Token are listed{" "}
-        <a
-          href="https://vercel.com/docs/rest-api#introduction/api-basics/authentication/creating-an-access-token"
-          target="_blank"
-          rel="noreferrer"
-          className="text-blue-500 dark:text-blue-400"
-        >
-          here
-        </a>
+        Steps for creating a Access Url : Enter the command `access url` in helper bot.
       </p>
     </section>
   );
