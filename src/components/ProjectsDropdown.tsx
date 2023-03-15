@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import useSWRInfinite from "swr/infinite";
-import { API_ENDPOINTS } from "~/constants/API";
-import {botsFetcher} from "~/helpers/fetcher";
+import {actionFetcher} from "~/helpers/fetcher";
 import { useIntersectionObserver } from "~/hooks";
-import {IBot, IProject} from "~/types";
+import {IBot} from "~/types";
 
 import Dropdown from "./common/Dropdown";
 
@@ -12,13 +11,8 @@ interface IProjectDropdownProps {
   selectedProject: string;
 }
 
-const getKey = (pageIndex: number, previousPageData: IProject) => {
-  // reached the end
-  if (previousPageData && !previousPageData.projects.length) return null;
-
-  if (pageIndex === 0) return API_ENDPOINTS.projects;
-
-  return `${API_ENDPOINTS.projects}?until=${previousPageData.pagination.next}`;
+const getKey = (pageIndex: number) => {
+  return `bots`;
 };
 
 const ProjectsDropdown = ({
@@ -26,7 +20,7 @@ const ProjectsDropdown = ({
   selectedProject,
 }: IProjectDropdownProps) => {
   const { data, error, isLoading, isValidating, setSize, size } =
-    useSWRInfinite<IBot>(getKey, botsFetcher, {
+    useSWRInfinite<IBot>(getKey, actionFetcher, {
       revalidateOnFocus: false,
     });
 

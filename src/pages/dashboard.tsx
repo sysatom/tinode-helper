@@ -5,14 +5,13 @@ import useSWR from "swr";
 import Header from "~/components/common/Header";
 import ProjectsDropdown from "~/components/ProjectsDropdown";
 import GearIcon from "~/svg/gear.svg";
-import { API_ENDPOINTS } from "~/constants/API";
-import {infoFetcher} from "~/helpers/fetcher";
+import {actionFetcher} from "~/helpers/fetcher";
 import {IInfo} from "~/types";
 import Link from "next/link";
 import Bots from "~/components/Bots";
 
 const Dashboard = () => {
-  const { data, error } = useSWR<IInfo, Error>(API_ENDPOINTS.user, infoFetcher);
+  const { data, error } = useSWR<IInfo, Error>("info", actionFetcher);
   const router = useRouter();
   const [selectedBot, setSelectedBot] = useState<string>("");
 
