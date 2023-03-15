@@ -55,3 +55,14 @@ export interface IPagination {
   next: number;
   prev: number;
 }
+
+export interface IInfo {
+  version: number;
+}
+
+export interface IBot {
+  bots: {
+    id: string;
+    name: string;
+  }[];
+}

@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { API_ENDPOINTS } from "~/constants/API";
-import fetcher from "~/helpers/fetcher";
 import UpdateIcon from "~/svg/update.svg";
+import {infoFetcher} from "~/helpers/fetcher";
 
 const TokenRegistration = () => {
   const [token, setToken] = useState("");
@@ -14,13 +13,13 @@ const TokenRegistration = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    localStorage.setItem("token", token);
+    localStorage.setItem("access-url", token);
     try {
-      await fetcher(API_ENDPOINTS.user);
+      await infoFetcher();
       router.push("/dashboard");
     } catch (error) {
-      setError("Invalid token");
-      localStorage.removeItem("token");
+      setError("Invalid access url");
+      localStorage.removeItem("access-url");
     } finally {
       setIsSubmitting(false);
     }

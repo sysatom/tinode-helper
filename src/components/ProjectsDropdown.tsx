@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import useSWRInfinite from "swr/infinite";
 import { API_ENDPOINTS } from "~/constants/API";
-import fetcher from "~/helpers/fetcher";
+import {botsFetcher} from "~/helpers/fetcher";
 import { useIntersectionObserver } from "~/hooks";
-import { IProject } from "~/types";
+import {IBot, IProject} from "~/types";
 
 import Dropdown from "./common/Dropdown";
 
@@ -26,7 +26,7 @@ const ProjectsDropdown = ({
   selectedProject,
 }: IProjectDropdownProps) => {
   const { data, error, isLoading, isValidating, setSize, size } =
-    useSWRInfinite<IProject>(getKey, fetcher, {
+    useSWRInfinite<IBot>(getKey, botsFetcher, {
       revalidateOnFocus: false,
     });
 
@@ -36,9 +36,9 @@ const ProjectsDropdown = ({
 
   const availableProjects = data
     ?.map((page) =>
-      page.projects.map((project) => ({
-        label: project.name,
-        id: project.id,
+      page.bots.map((bot) => ({
+        label: bot.name,
+        id: bot.id,
       }))
     )
     .flat();

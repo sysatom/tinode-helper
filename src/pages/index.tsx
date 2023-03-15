@@ -8,9 +8,9 @@ function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const accessUrl = localStorage.getItem("access-url");
 
-    if (token) {
+    if (accessUrl) {
       router.push("/dashboard");
     }
   }, []);

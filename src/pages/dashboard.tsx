@@ -3,28 +3,28 @@ import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 import Header from "~/components/common/Header";
-import Deployments from "~/components/Deployments";
 import ProjectsDropdown from "~/components/ProjectsDropdown";
 import GearIcon from "~/svg/gear.svg";
 import { API_ENDPOINTS } from "~/constants/API";
-import fetcher from "~/helpers/fetcher";
-import { IUser } from "~/types";
+import {infoFetcher} from "~/helpers/fetcher";
+import {IInfo} from "~/types";
 import Link from "next/link";
+import Bots from "~/components/Bots";
 
 const Dashboard = () => {
-  const { data, error } = useSWR<IUser, Error>(API_ENDPOINTS.user, fetcher);
+  const { data, error } = useSWR<IInfo, Error>(API_ENDPOINTS.user, infoFetcher);
   const router = useRouter();
-  const [selectedProject, setSelectedProject] = useState<string>("");
+  const [selectedBot, setSelectedBot] = useState<string>("");
 
   if (
-    error?.message === "No token found" ||
+    error?.message === "No access url found" ||
     error?.message === "Not authenticated"
   ) {
     router.push("/");
   }
 
   const handleProjectChange = (id: string) => {
-    setSelectedProject(id);
+    setSelectedBot(id);
   };
 
   if (!data) return;
@@ -34,7 +34,7 @@ const Dashboard = () => {
       <Header classes="justify-between">
         <div className="flex items-center">
           <Image
-            src={`https://vercel.com/api/www/avatar/${data?.user.avatar}?s=60`}
+            src={`https://vercel.com/api/www/avatar/user?s=60`}
             width={32}
             height={32}
             alt="Avatar"
@@ -42,16 +42,16 @@ const Dashboard = () => {
           />
           <section className="ml-2 flex flex-col">
             <p className="text-base font-medium text-zinc-900 dark:text-zinc-50">
-              {data?.user.name}
+              name
             </p>
             <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              {data?.user.username}
+              username
             </p>
           </section>
         </div>
         <div className="flex items-center">
           <ProjectsDropdown
-            selectedProject={selectedProject}
+            selectedProject={selectedBot}
             handleProjectChange={handleProjectChange}
           />
           <Link href="/settings">
@@ -61,7 +61,7 @@ const Dashboard = () => {
           </Link>
         </div>
       </Header>
-      <Deployments selectedProject={selectedProject} />
+      <Bots selectedBot={selectedBot} />
     </Fragment>
   );
 };
