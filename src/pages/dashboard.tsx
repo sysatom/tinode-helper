@@ -29,6 +29,11 @@ const Dashboard = () => {
 
   if (!data) return;
 
+  // get id
+  let r = /\d{20,}/;
+  const accessUrl = localStorage.getItem("access-url");
+  let id = accessUrl?.match(r);
+
   return (
     <Fragment>
       <Header classes="justify-between">
@@ -42,10 +47,10 @@ const Dashboard = () => {
           />
           <section className="ml-2 flex flex-col">
             <p className="text-base font-medium text-zinc-900 dark:text-zinc-50">
-              name
+              {data?.username}
             </p>
             <p className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              username
+              {id}
             </p>
           </section>
         </div>

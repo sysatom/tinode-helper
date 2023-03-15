@@ -58,6 +58,7 @@ export interface IPagination {
 
 export interface IInfo {
   version: number;
+  username: string;
 }
 
 export interface IBot {
