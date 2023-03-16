@@ -58,7 +58,6 @@ const Bots = ({selectedBot}: IBotsProps) => {
                         >
                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full shadow-[0_2px_2px] shadow-blackA7 transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                         </Switch.Root>
-                        <div className="w-[320px] text-sm font-medium text-zinc-700 dark:text-zinc-200 pl-4">agent, command</div>
                     </div>
                 ))
             }</div>) : (<div style={{height: "500px", overflow: "auto"}}>

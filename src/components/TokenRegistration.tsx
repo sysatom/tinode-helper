@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import UpdateIcon from "~/svg/update.svg";
-import {infoFetcher} from "~/helpers/fetcher";
+import {actionFetcher} from "~/helpers/fetcher";
 
 const TokenRegistration = () => {
   const [token, setToken] = useState("");
@@ -15,7 +15,7 @@ const TokenRegistration = () => {
     setError("");
     localStorage.setItem("access-url", token);
     try {
-      await infoFetcher();
+      await actionFetcher("info");
       router.push("/dashboard");
     } catch (error) {
       setError("Invalid access url");
