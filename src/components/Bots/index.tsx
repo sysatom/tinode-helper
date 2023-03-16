@@ -28,9 +28,10 @@ const Bots = ({selectedBot}: IBotsProps) => {
     })
     const {data, error} = useSWR<IBot, Error>("bots", actionFetcher)
 
+    let [help, setHelp] = useState<{ [key: string]: Array<String> }>({})
     useEffect(() => {
        if (selectedBot != "") {
-           console.log(selectedBot)
+           actionFetcher("help", selectedBot).then(r => setHelp(r))
        }
     });
 
@@ -60,7 +61,23 @@ const Bots = ({selectedBot}: IBotsProps) => {
                         <div className="w-[320px] text-sm font-medium text-zinc-700 dark:text-zinc-200 pl-4">agent, command</div>
                     </div>
                 ))
-            }</div>) : (<div>{selectedBot}</div>)
+            }</div>) : (<div style={{height: "500px", overflow: "auto"}}>
+                <h2 className="text-center text-xl mt-3 mb-3">{selectedBot}</h2>
+                <table style={{width: "90%", margin: "auto"}}>
+                    <tr>
+                        <th>Type</th>
+                        <th>Help</th>
+                    </tr>
+                    {
+                        Object.keys(help).map((key) => {
+                            return help[key].map(v => <tr>
+                                <td>{key}</td>
+                                <td>{v}</td>
+                            </tr>)
+                        })
+                    }
+                </table>
+            </div>)
         }
         </div>
     );
