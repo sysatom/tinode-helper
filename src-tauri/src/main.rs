@@ -3,8 +3,11 @@
     windows_subsystem = "windows"
 )]
 
+use serde_json::json;
 use tauri::Manager;
 use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use tauri::api::path::data_dir;
+use tauri_plugin_store::StoreBuilder;
 
 #[tauri::command]
 fn set_review_count(count: &str) {
@@ -19,6 +22,7 @@ fn main() {
         .with_menu(tray_menu);
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::default().build())
         .system_tray(system_tray)
         .on_system_tray_event(move |app, event| match event {
             SystemTrayEvent::LeftClick { position, size, .. } => {
@@ -76,6 +80,13 @@ fn main() {
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
+
+            // store
+            let store_path = data_dir().unwrap().join("helper").join("store.data");
+            println!("{}", store_path.to_str().unwrap());
+            let mut store = StoreBuilder::new(app.handle(), store_path).build();
+            store.insert("test".to_string(), json!("demo")).expect("TODO: panic message");
+            store.save().unwrap();
 
             Ok(())
         })

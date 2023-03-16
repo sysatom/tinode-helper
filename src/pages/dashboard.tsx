@@ -9,6 +9,11 @@ import {actionFetcher} from "~/helpers/fetcher";
 import {IInfo} from "~/types";
 import Link from "next/link";
 import Bots from "~/components/Bots";
+import {sendNotification} from "@tauri-apps/api/notification";
+import { open } from '@tauri-apps/api/shell';
+import {readText, writeText} from '@tauri-apps/api/clipboard';
+import { dataDir,join } from '@tauri-apps/api/path';
+import {Store} from "tauri-plugin-store-api";
 
 const Dashboard = () => {
   const { data, error } = useSWR<IInfo, Error>("info", actionFetcher);
@@ -32,6 +37,30 @@ const Dashboard = () => {
   let r = /\d{20,}/;
   const accessUrl = localStorage.getItem("access-url");
   let id = accessUrl?.match(r);
+
+  // test
+  const onTest = () => {
+    open("https://github.com/tauri-apps/tauri").then(r=>console.log(r));
+
+    readText().then(txt => {
+      sendNotification({
+        title: "Helper",
+        body: `clipboard: ${txt}`,
+      })
+    });
+
+    dataDir().then(path => {
+      join(path, "helper", "store.data").then(f => {
+        const store = new Store(f);
+        store.get("test").then(val => {
+          sendNotification({
+            title: "Helper",
+            body: `store: ${val}`,
+          })
+        })
+      })
+    })
+  }
 
   return (
     <Fragment>
@@ -66,6 +95,7 @@ const Dashboard = () => {
         </div>
       </Header>
       <Bots selectedBot={selectedBot} />
+      <button onClick={onTest}>Test</button>
     </Fragment>
   );
 };
