@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { Fragment, useEffect } from "react";
-import useSWR from "swr";
 import Header from "~/components/common/Header";
 import TokenRegistration from "~/components/TokenRegistration";
-import {getStore} from "~/helpers/store";
+import {deleteStore, getStore} from "~/helpers/store";
+import {actionFetcher} from "~/helpers/fetcher";
 
 function Index() {
   const router = useRouter();
@@ -11,10 +11,15 @@ function Index() {
   useEffect(() => {
     getStore("access-url").then(url => {
       if (url) {
-        router.push("/dashboard");
+        actionFetcher("info").then(r => {
+          router.push("/dashboard");
+        }).catch(err => {
+          console.log("index info", err)
+          deleteStore("access-url").then();
+        })
       }
     })
-  }, []);
+  })
 
   return (
     <Fragment>

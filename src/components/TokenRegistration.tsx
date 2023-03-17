@@ -14,12 +14,12 @@ const TokenRegistration = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    setStore("access-url", token).then();
     try {
+      await setStore("access-url", token);
       await actionFetcher("info");
       router.push("/dashboard");
     } catch (error) {
-      setError("Invalid access url");
+      setError("Invalid access url " + error);
       deleteStore("access-url").then();
     } finally {
       setIsSubmitting(false);

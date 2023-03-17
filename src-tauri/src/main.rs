@@ -3,23 +3,12 @@
     windows_subsystem = "windows"
 )]
 
-use serde_json::json;
+mod cmd;
+mod scheduler;
+
+use std::sync::Arc;
 use tauri::Manager;
 use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
-use tauri::api::path::data_dir;
-use tauri_plugin_store::StoreBuilder;
-
-#[tauri::command]
-fn set_review_count(count: &str) {
-    let mut rev_count = count.to_string();
-    rev_count.insert_str(0, " ");
-}
-
-#[tauri::command]
-fn get_store_path() -> String {
-    let store_path = data_dir().unwrap().join("helper").join("store.data");
-    return store_path.to_str().unwrap().to_string();
-}
 
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Helper");
@@ -82,10 +71,18 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![set_review_count, get_store_path])
+        .invoke_handler(tauri::generate_handler![cmd::set_review_count, cmd::get_store_path])
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
+
+            // async
+            // let app_handle = Arc::new(app.handle());
+            // tauri::async_runtime::spawn(async move {
+            //     println!("spawn");
+            //     scheduler::setup(app_handle.clone().app_handle()).await;
+            // });
+
             Ok(())
         })
         .build(tauri::generate_context!())

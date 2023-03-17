@@ -16,9 +16,8 @@ const Bots = ({selectedBot}: IBotsProps) => {
 
     useEffect(() => {
         if (selectedBot != "") {
-            actionFetcher("help", selectedBot).then(r => setHelp(r))
+            actionFetcher("help", selectedBot).then(r => setHelp(r)).catch();
         } else {
-            // 
             const getBotSwitch = async () => {
                 const value = await getStore("bot-switch");
                 if (value) {
@@ -37,7 +36,7 @@ const Bots = ({selectedBot}: IBotsProps) => {
             }
             getBotSwitch();
         }
-    });
+    }, [selectedBot]);
 
     const handleUpdateValue = (key:string, newValue:boolean) => {
         const newMap = new Map<String, boolean>(Array.from(botSwitch).map(([k, v]) => (k === key ? [k, newValue] : [k, v])));

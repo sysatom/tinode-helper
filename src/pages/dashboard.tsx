@@ -9,7 +9,7 @@ import {actionFetcher} from "~/helpers/fetcher";
 import {IInfo} from "~/types";
 import Link from "next/link";
 import Bots from "~/components/Bots";
-import { getStore } from "~/helpers/store";
+import {deleteStore, getStore} from "~/helpers/store";
 
 const Dashboard = () => {
   const { data, error } = useSWR<IInfo, Error>("info", actionFetcher);
@@ -17,23 +17,31 @@ const Dashboard = () => {
   const [selectedBot, setSelectedBot] = useState<string>("");
   const [id, setId] = useState<string>("");
 
-  if (
-    error?.message === "No access url found" ||
-    error?.message === "Not authenticated"
-  ) {
-    router.push("/");
-  }
+  useEffect(()=> {
+    if (
+        error?.message === "No access url found" ||
+        error?.message === "Not authenticated" ||
+        error?.message === "Request error"
+    ) {
+      deleteStore("access-url").then();
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    }
+  }, [error])
 
   const handleProjectChange = (id: string) => {
     setSelectedBot(id);
   };
 
-  if (!data) return;
+  // if (!data) return;
 
   // get id
   getStore("access-url").then(url => {
-    let r = /\d{20,}/;
-    setId((url as string).match(r)?.join('') || "-");
+    if (url) {
+      let r = /\d{20,}/;
+      setId((url as string).match(r)?.join('') || "-");
+    }
   });
 
   return (

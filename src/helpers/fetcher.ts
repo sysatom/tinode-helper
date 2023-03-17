@@ -31,10 +31,16 @@ export async function actionFetcher<JSON = any>(
     throw new Error("No access url found");
   }
 
-  const res = await fetch(accessUrl as string, {
-    method: "POST",
-    body: JSON.stringify({action: action, version: 1, content: content})
-  });
+  let res;
+  try {
+     res = await fetch(accessUrl as string, {
+      method: "POST",
+      body: JSON.stringify({action: action, version: 1, content: content})
+    });
+  } catch (err) {
+    console.log("request",err);
+    throw new Error("Request error");
+  }
 
   if (!res.ok) {
     throw new Error("Not authenticated");

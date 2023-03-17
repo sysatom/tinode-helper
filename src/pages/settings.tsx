@@ -7,6 +7,7 @@ import Header from "~/components/common/Header";
 import RadioGroup from "~/components/common/RadioGroup";
 import Slider from "~/components/common/Slider";
 import LeftArrow from "~/svg/arrow-left.svg";
+import {deleteStore} from "~/helpers/store";
 
 const THEMES = [
   {
@@ -167,10 +168,10 @@ const SettingsPage = () => {
             description="You will be stop and your access url will be deleted from local storage"
             triggerLabel="Stop"
             handleConfirm={() => {
-              localStorage.removeItem("token");
+              deleteStore("access-url").then();
               setTimeout(() => {
                 router.push("/");
-              }, 1);
+              }, 1000);
             }}
           />
         </section>
