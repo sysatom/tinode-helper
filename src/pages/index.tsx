@@ -3,16 +3,17 @@ import { Fragment, useEffect } from "react";
 import useSWR from "swr";
 import Header from "~/components/common/Header";
 import TokenRegistration from "~/components/TokenRegistration";
+import {getStore} from "~/helpers/store";
 
 function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    const accessUrl = localStorage.getItem("access-url");
-
-    if (accessUrl) {
-      router.push("/dashboard");
-    }
+    getStore("access-url").then(url => {
+      if (url) {
+        router.push("/dashboard");
+      }
+    })
   }, []);
 
   return (

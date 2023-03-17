@@ -3,42 +3,46 @@ import useSWR from "swr";
 import {actionFetcher} from "~/helpers/fetcher";
 import {IBot} from "~/types";
 import * as Switch from '@radix-ui/react-switch';
+import { getStore, setStore } from "~/helpers/store";
 
 interface IBotsProps {
     selectedBot: string;
 }
 
 const Bots = ({selectedBot}: IBotsProps) => {
-    let [botSwitch, setBotSwitch] = useState<Map<String, boolean>>(() => {
-        const value = localStorage.getItem("bot-switch")
-        if (value) {
-            let result = JSON.parse(value)
-            if (result) {
-                let m = result as Array<any>
-                if (m != undefined) {
-                    const newMap = new Map<String, boolean>()
-                    m.forEach(([key, value]) => {
-                        newMap.set(key, value);
-                    });
-                    return newMap
+    let [botSwitch, setBotSwitch] = useState<Map<String, boolean>>(new Map<string, any>());
+    const {data, error} = useSWR<IBot, Error>("bots", actionFetcher);
+    let [help, setHelp] = useState<{ [key: string]: Array<String> }>({});
+
+    useEffect(() => {
+        if (selectedBot != "") {
+            actionFetcher("help", selectedBot).then(r => setHelp(r))
+        } else {
+            // 
+            const getBotSwitch = async () => {
+                const value = await getStore("bot-switch");
+                if (value) {
+                    let result = JSON.parse(value as string);
+                    if (result) {
+                        let m = result as Array<any>
+                        if (m != undefined) {
+                            const newMap = new Map<String, boolean>()
+                            m.forEach(([key, value]) => {
+                                newMap.set(key, value);
+                            });
+                            setBotSwitch(newMap);
+                        }
+                    }
                 }
             }
+            getBotSwitch();
         }
-        return new Map<string, any>()
-    })
-    const {data, error} = useSWR<IBot, Error>("bots", actionFetcher)
-
-    let [help, setHelp] = useState<{ [key: string]: Array<String> }>({})
-    useEffect(() => {
-       if (selectedBot != "") {
-           actionFetcher("help", selectedBot).then(r => setHelp(r))
-       }
     });
 
     const handleUpdateValue = (key:string, newValue:boolean) => {
         const newMap = new Map<String, boolean>(Array.from(botSwitch).map(([k, v]) => (k === key ? [k, newValue] : [k, v])));
-        newMap.set(key, newValue)
-        localStorage.setItem("bot-switch", JSON.stringify(Array.from(newMap)))
+        newMap.set(key, newValue);
+        setStore("bot-switch", JSON.stringify(Array.from(newMap))).then();
         setBotSwitch(newMap);
     };
 
@@ -63,18 +67,22 @@ const Bots = ({selectedBot}: IBotsProps) => {
             }</div>) : (<div style={{height: "500px", overflow: "auto"}}>
                 <h2 className="text-center text-xl mt-3 mb-3">{selectedBot}</h2>
                 <table style={{width: "90%", margin: "auto"}}>
+                    <thead>
                     <tr>
                         <th>Type</th>
                         <th>Help</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     {
-                        Object.keys(help).map((key) => {
-                            return help[key].map(v => <tr>
+                        Object.keys(help).map((key, i) => {
+                            return help[key].map((v, j) => <tr key={`${i}-${j}`}>
                                 <td>{key}</td>
                                 <td>{v}</td>
                             </tr>)
                         })
                     }
+                    </tbody>
                 </table>
             </div>)
         }

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import UpdateIcon from "~/svg/update.svg";
 import {actionFetcher} from "~/helpers/fetcher";
+import { deleteStore, getStore, setStore } from "~/helpers/store";
 
 const TokenRegistration = () => {
   const [token, setToken] = useState("");
@@ -13,13 +14,13 @@ const TokenRegistration = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    localStorage.setItem("access-url", token);
+    setStore("access-url", token).then();
     try {
       await actionFetcher("info");
       router.push("/dashboard");
     } catch (error) {
       setError("Invalid access url");
-      localStorage.removeItem("access-url");
+      deleteStore("access-url").then();
     } finally {
       setIsSubmitting(false);
     }

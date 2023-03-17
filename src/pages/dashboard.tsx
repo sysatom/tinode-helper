@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 import Header from "~/components/common/Header";
 import ProjectsDropdown from "~/components/ProjectsDropdown";
@@ -9,16 +9,13 @@ import {actionFetcher} from "~/helpers/fetcher";
 import {IInfo} from "~/types";
 import Link from "next/link";
 import Bots from "~/components/Bots";
-import {sendNotification} from "@tauri-apps/api/notification";
-import { open } from '@tauri-apps/api/shell';
-import {readText, writeText} from '@tauri-apps/api/clipboard';
-import { dataDir,join } from '@tauri-apps/api/path';
-import {Store} from "tauri-plugin-store-api";
+import { getStore } from "~/helpers/store";
 
 const Dashboard = () => {
   const { data, error } = useSWR<IInfo, Error>("info", actionFetcher);
   const router = useRouter();
   const [selectedBot, setSelectedBot] = useState<string>("");
+  const [id, setId] = useState<string>("");
 
   if (
     error?.message === "No access url found" ||
@@ -34,33 +31,10 @@ const Dashboard = () => {
   if (!data) return;
 
   // get id
-  let r = /\d{20,}/;
-  const accessUrl = localStorage.getItem("access-url");
-  let id = accessUrl?.match(r);
-
-  // test
-  const onTest = () => {
-    open("https://github.com/tauri-apps/tauri").then(r=>console.log(r));
-
-    readText().then(txt => {
-      sendNotification({
-        title: "Helper",
-        body: `clipboard: ${txt}`,
-      })
-    });
-
-    dataDir().then(path => {
-      join(path, "helper", "store.data").then(f => {
-        const store = new Store(f);
-        store.get("test").then(val => {
-          sendNotification({
-            title: "Helper",
-            body: `store: ${val}`,
-          })
-        })
-      })
-    })
-  }
+  getStore("access-url").then(url => {
+    let r = /\d{20,}/;
+    setId((url as string).match(r)?.join('') || "-");
+  });
 
   return (
     <Fragment>
@@ -95,7 +69,6 @@ const Dashboard = () => {
         </div>
       </Header>
       <Bots selectedBot={selectedBot} />
-      <button onClick={onTest}>Test</button>
     </Fragment>
   );
 };

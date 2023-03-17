@@ -15,6 +15,12 @@ fn set_review_count(count: &str) {
     rev_count.insert_str(0, " ");
 }
 
+#[tauri::command]
+fn get_store_path() -> String {
+    let store_path = data_dir().unwrap().join("helper").join("store.data");
+    return store_path.to_str().unwrap().to_string();
+}
+
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Helper");
     let tray_menu = SystemTrayMenu::new().add_item(quit);
@@ -76,18 +82,10 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![set_review_count])
+        .invoke_handler(tauri::generate_handler![set_review_count, get_store_path])
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
-
-            // store
-            let store_path = data_dir().unwrap().join("helper").join("store.data");
-            println!("{}", store_path.to_str().unwrap());
-            let mut store = StoreBuilder::new(app.handle(), store_path).build();
-            store.insert("test".to_string(), json!("demo")).expect("TODO: panic message");
-            store.save().unwrap();
-
             Ok(())
         })
         .build(tauri::generate_context!())
