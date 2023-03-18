@@ -5,6 +5,7 @@
 
 mod cmd;
 mod scheduler;
+mod agent;
 
 use std::sync::Arc;
 use tauri::Manager;
@@ -77,11 +78,11 @@ fn main() {
             window.set_always_on_top(true).unwrap();
 
             // async
-            // let app_handle = Arc::new(app.handle());
-            // tauri::async_runtime::spawn(async move {
-            //     println!("spawn");
-            //     scheduler::setup(app_handle.clone().app_handle()).await;
-            // });
+            let app_handle = Arc::new(app.handle());
+            tauri::async_runtime::spawn(async move {
+                println!("spawn");
+                scheduler::setup(app_handle.clone().app_handle()).await;
+            });
 
             Ok(())
         })
