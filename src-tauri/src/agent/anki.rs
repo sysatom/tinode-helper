@@ -3,7 +3,7 @@ use std::fmt;
 use serde::{Deserialize};
 use serde_json::{json, Value};
 use crate::agent::agent_post_data;
-use crate::agent::error::AgentError;
+use crate::agent::AGENT_VERSION;
 
 pub fn run() {}
 
@@ -24,7 +24,7 @@ async fn stats() {
         Ok(html) => {
             agent_post_data(URI.to_string(), json!({
                 "action": "agent",
-                "version": 1,
+                "version": AGENT_VERSION,
                 "content": {
                     "id": "stats_agent",
                     "content": {
@@ -43,7 +43,7 @@ async fn review() {
         Ok(count) => {
             agent_post_data(URI.to_string(), json!({
                 "action": "agent",
-                "version": 1,
+                "version": AGENT_VERSION,
                 "content": {
                     "id": "review_agent",
                     "content": {
@@ -58,9 +58,9 @@ async fn review() {
 
 async fn get_collection_stats_html() -> Result<String, Box<dyn Error>> {
     let param = json!({
-       "action":  "getCollectionStatsHTML",
+        "action":  "getCollectionStatsHTML",
         "version": API_VERSION,
-       "params": {
+        "params": {
             "wholeCollection": true,
         }
     });
