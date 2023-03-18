@@ -1,6 +1,6 @@
 #![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
+all(not(debug_assertions), target_os = "windows"),
+windows_subsystem = "windows"
 )]
 
 mod cmd;
@@ -8,10 +8,42 @@ mod scheduler;
 mod agent;
 
 use std::sync::Arc;
+use env_logger::{Builder, Env};
+use env_logger::fmt::Color;
+use log::{info, Level};
 use tauri::Manager;
 use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use crate::agent::anki;
+use std::io::Write;
+
+
+fn init_logger() {
+    let env = Env::default()
+        .filter_or("LOG_LEVEL", "info");
+
+    Builder::from_env(env)
+        .format(|buf, record| {
+            let mut style = buf.style();
+            // style.set_bg(Color::Yellow).set_color(Color::White).set_bold(true);
+
+            let timestamp = buf.timestamp();
+
+            writeln!(
+                buf,
+                "helper log ({}): {}",
+                timestamp,
+                style.value(record.args())
+            )
+        })
+        .init();
+}
 
 fn main() {
+    // log
+    init_logger();
+
+    info!("starting app ...");
+
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Helper");
     let tray_menu = SystemTrayMenu::new().add_item(quit);
     let system_tray = SystemTray::new()
@@ -77,11 +109,12 @@ fn main() {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
 
-            // async
-            let app_handle = Arc::new(app.handle());
+            // cron
+            // let app_handle = Arc::new(app.handle());
             tauri::async_runtime::spawn(async move {
-                println!("spawn");
-                scheduler::setup(app_handle.clone().app_handle()).await;
+                info!("cron starting");
+                anki::do_something().await;
+                // scheduler::setup(app_handle.clone().app_handle()).await;
             });
 
             Ok(())

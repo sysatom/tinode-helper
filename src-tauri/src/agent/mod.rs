@@ -1,3 +1,5 @@
+use log::info;
+
 pub mod anki;
 
 const AGENT_VERSION: i32 = 1;
@@ -8,6 +10,8 @@ async fn agent_post_data(agent_uri: String, data: serde_json::Value) -> Result<b
         .body(data.to_string())
         .send()
         .await?;
+
+    info!("agent_post_data request status {}", response.status());
 
     if response.status().is_success() {
         Ok(true)
