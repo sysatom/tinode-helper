@@ -6,6 +6,7 @@ windows_subsystem = "windows"
 mod cmd;
 mod scheduler;
 mod agent;
+mod instruct;
 
 use std::sync::Arc;
 use env_logger::{Builder, Env};
@@ -30,7 +31,7 @@ fn init_logger() {
 
             writeln!(
                 buf,
-                "helper log ({}): {}",
+                "[{}]: {}",
                 timestamp,
                 style.value(record.args())
             )
@@ -110,11 +111,11 @@ fn main() {
             window.set_always_on_top(true).unwrap();
 
             // cron
-            // let app_handle = Arc::new(app.handle());
             tauri::async_runtime::spawn(async move {
-                info!("cron starting");
                 anki::do_something().await;
-                // scheduler::setup(app_handle.clone().app_handle()).await;
+            });
+            tauri::async_runtime::spawn(async move {
+                instruct::pull().await;
             });
 
             Ok(())

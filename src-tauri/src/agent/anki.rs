@@ -29,12 +29,12 @@ pub async fn run() {
 }
 
 pub async fn do_something() {
+    info!("do_something starting");
     loop {
-        thread::sleep(Duration::from_secs(5));
-
         if let Err(err) = stats().await {
             error!("do_something run: {}", err);
         }
+        thread::sleep(Duration::from_secs(5));
     }
 }
 

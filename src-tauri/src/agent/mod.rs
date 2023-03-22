@@ -2,7 +2,7 @@ use log::info;
 
 pub mod anki;
 
-const AGENT_VERSION: i32 = 1;
+pub const AGENT_VERSION: i32 = 1;
 
 async fn agent_post_data(agent_uri: String, data: serde_json::Value) -> Result<bool, Box<dyn std::error::Error>> {
     let client = reqwest::Client::new();
