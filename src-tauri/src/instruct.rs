@@ -1,4 +1,4 @@
-use crate::agent::AGENT_VERSION;
+use crate::agent::{AGENT_VERSION, anki, clipboard, dev};
 use chrono::{DateTime, Local};
 use serde::Deserialize;
 use serde_json::json;
@@ -6,13 +6,27 @@ use std::error::Error;
 use std::thread;
 use std::time::Duration;
 use log::info;
+use moka::sync::Cache;
 
 pub async fn pull() {
     info!("pull starting");
+    let cache: Cache<String, bool> = Cache::new(100_1000);
     loop {
         if let Ok(instruct) = get_pull_list().await {
             for item in instruct.iter() {
-                info!("instruct -> {:?}", item);
+                match cache.get(item.no.as_str()) {
+                    Some(value) => info!("skip {}", item.no),
+                    None => {
+                        info!("instruct {} -> {}", item.no, item.flag);
+                        cache.insert(item.no.clone(), true);
+                        match item.bot.as_str() {
+                            dev::NAME => { dev::instruct(item.flag.as_str()) }
+                            anki::NAME => { anki::instruct(item.flag.as_str()) }
+                            clipboard::NAME => { clipboard::instruct(item.flag.as_str()) }
+                            _ => {}
+                        }
+                    }
+                }
             }
         }
         thread::sleep(Duration::from_secs(5));

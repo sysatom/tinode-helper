@@ -1,6 +1,8 @@
 use log::info;
 
 pub mod anki;
+pub mod clipboard;
+pub mod dev;
 
 pub const AGENT_VERSION: i32 = 1;
 

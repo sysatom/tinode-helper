@@ -9,6 +9,9 @@ use tokio_cron_scheduler::{Job, JobScheduler};
 use crate::agent::agent_post_data;
 use crate::agent::AGENT_VERSION;
 
+
+pub const NAME: &str = "anki";
+
 pub async fn run() {
     let sched = JobScheduler::new().await;
     let sched = sched.unwrap();
@@ -35,6 +38,14 @@ pub async fn do_something() {
             error!("do_something run: {}", err);
         }
         thread::sleep(Duration::from_secs(5));
+    }
+}
+
+pub fn instruct(flag: &str) {
+    match flag {
+        _ => {
+            info!("anki default instruct");
+        }
     }
 }
 
