@@ -6,7 +6,7 @@ pub mod dev;
 
 pub const AGENT_VERSION: i32 = 1;
 
-async fn agent_post_data(agent_uri: String, data: serde_json::Value) -> Result<bool, Box<dyn std::error::Error>> {
+pub async fn agent_post_data(agent_uri: String, data: serde_json::Value) -> Result<bool, Box<dyn std::error::Error>> {
     let client = reqwest::Client::new();
     let response = client.post(agent_uri)
         .body(data.to_string())
