@@ -1,43 +1,20 @@
 #![cfg_attr(
-all(not(debug_assertions), target_os = "windows"),
-windows_subsystem = "windows"
+   all(not(debug_assertions), target_os = "windows"),
+   windows_subsystem = "windows"
 )]
 
 mod cmd;
 mod scheduler;
 mod agent;
 mod instruct;
+mod logger;
 
-use std::sync::Arc;
-use env_logger::{Builder, Env};
-use env_logger::fmt::Color;
-use log::{info, Level};
 use tauri::Manager;
 use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
 use crate::agent::anki;
-use std::io::Write;
+use log::info;
+use crate::logger::init_logger;
 
-
-fn init_logger() {
-    let env = Env::default()
-        .filter_or("LOG_LEVEL", "info");
-
-    Builder::from_env(env)
-        .format(|buf, record| {
-            let mut style = buf.style();
-            // style.set_bg(Color::Yellow).set_color(Color::White).set_bold(true);
-
-            let timestamp = buf.timestamp();
-
-            writeln!(
-                buf,
-                "[{}]: {}",
-                timestamp,
-                style.value(record.args())
-            )
-        })
-        .init();
-}
 
 fn main() {
     // log

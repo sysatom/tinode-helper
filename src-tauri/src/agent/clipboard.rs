@@ -1,7 +1,7 @@
 use std::error::Error;
 use log::info;
 use serde_json::json;
-use crate::agent::agent_post_data;
+use crate::agent::{agent_post_data, AGENT_VERSION, URI};
 
 pub const NAME: &str = "clipboard";
 

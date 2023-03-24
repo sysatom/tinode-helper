@@ -6,11 +6,13 @@ use log::{error, info};
 use serde::{Deserialize};
 use serde_json::{json, Value};
 use tokio_cron_scheduler::{Job, JobScheduler};
-use crate::agent::agent_post_data;
-use crate::agent::AGENT_VERSION;
+use crate::agent::{agent_post_data, URI, AGENT_VERSION};
 
 
 pub const NAME: &str = "anki";
+
+const API_VERSION: i32 = 6;
+const API_URI: &str = "http://127.0.0.1:8765";
 
 pub async fn run() {
     let sched = JobScheduler::new().await;
@@ -49,10 +51,6 @@ pub fn instruct(flag: &str) {
     }
 }
 
-const API_VERSION: i32 = 6;
-const API_URI: &str = "http://127.0.0.1:8765";
-
-const URI: &str = "http://127.0.0.1:6060/extra/helper/17818979592756537925/YG2ZztWyW54";//todo
 
 #[derive(Deserialize)]
 struct Response {

@@ -5,6 +5,7 @@ pub mod clipboard;
 pub mod dev;
 
 pub const AGENT_VERSION: i32 = 1;
+pub const URI: &str = "http://127.0.0.1:6060/extra/helper/17818979592756537925/YG2ZztWyW54";//todo
 
 pub async fn agent_post_data(agent_uri: String, data: serde_json::Value) -> Result<bool, Box<dyn std::error::Error>> {
     let client = reqwest::Client::new();
