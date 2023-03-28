@@ -7,6 +7,7 @@ use serde::{Deserialize};
 use serde_json::{json, Value};
 use tokio_cron_scheduler::{Job, JobScheduler};
 use crate::agent::{agent_post_data, URI, AGENT_VERSION};
+use anyhow::{anyhow, Result};
 
 
 pub const NAME: &str = "anki";
@@ -58,7 +59,7 @@ struct Response {
     result: Value,
 }
 
-async fn stats() -> Result<(), Box<dyn Error>> {
+async fn stats() -> Result<()> {
     let html = get_collection_stats_html().await?;
     agent_post_data(URI.to_string(), json!({
         "action": "agent",
@@ -73,7 +74,7 @@ async fn stats() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn review() -> Result<(), Box<dyn Error>> {
+async fn review() -> Result<()> {
     let count = get_num_cards_reviewed_today().await?;
     agent_post_data(URI.to_string(), json!({
         "action": "agent",
@@ -88,7 +89,7 @@ async fn review() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn get_collection_stats_html() -> Result<String, Box<dyn Error>> {
+async fn get_collection_stats_html() -> Result<String> {
     let param = json!({
         "action":  "getCollectionStatsHTML",
         "version": API_VERSION,
@@ -108,17 +109,17 @@ async fn get_collection_stats_html() -> Result<String, Box<dyn Error>> {
     if response.status().is_success() {
         let result = response.json::<Response>().await?;
         if let Some(error) = result.error {
-            Err(error.into())
+            Err(anyhow!(error))
         } else {
             let html = String::from(result.result.as_str().unwrap());
             Ok(html)
         }
     } else {
-        Err("error response".into())
+        Err(anyhow!("error response"))
     }
 }
 
-async fn get_num_cards_reviewed_today() -> Result<i64, Box<dyn Error>> {
+async fn get_num_cards_reviewed_today() -> Result<i64> {
     let param = json!({
        "action":  "getNumCardsReviewedToday",
         "version": API_VERSION,
@@ -135,12 +136,12 @@ async fn get_num_cards_reviewed_today() -> Result<i64, Box<dyn Error>> {
     if response.status().is_success() {
         let result = response.json::<Response>().await?;
         if let Some(error) = result.error {
-            Err(error.into())
+            Err(anyhow!(error))
         } else {
             Ok(result.result.as_i64().unwrap_or(-1))
         }
     } else {
-        Err("error response".into())
+        Err(anyhow!("error response"))
     }
 }
 

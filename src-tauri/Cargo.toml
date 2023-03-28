@@ -25,6 +25,7 @@ log = "0.4.17"
 env_logger = { version = "0.10.0", features = ["color", "humantime"] }
 moka = { version = "0.10", features = ["future"] }
 arboard = "3.2.0"
+anyhow = "1.0.70"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

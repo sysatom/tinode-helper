@@ -6,6 +6,7 @@ use std::thread;
 use std::time::Duration;
 use log::info;
 use moka::sync::Cache;
+use anyhow::Result;
 
 pub async fn pull() {
     info!("pull starting");
@@ -48,7 +49,7 @@ struct Data {
 
 const URI: &str = "http://127.0.0.1:6060/extra/helper/17818979592756537925/YG2ZztWyW54";
 
-async fn get_pull_list() -> Result<Vec<Instruct>, Box<dyn Error>> {
+async fn get_pull_list() -> Result<Vec<Instruct>> {
     let param = json!({
         "action": "pull",
         "version": AGENT_VERSION,

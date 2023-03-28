@@ -3635,6 +3635,7 @@ dependencies = [
 name = "tinode-helper"
 version = "0.0.0"
 dependencies = [
+ "anyhow",
  "arboard",
  "chrono",
  "env_logger",

@@ -2,6 +2,7 @@ use std::error::Error;
 use log::info;
 use serde_json::json;
 use crate::agent::{agent_post_data, AGENT_VERSION, URI};
+use anyhow::Result;
 
 pub const NAME: &str = "dev";
 
@@ -16,7 +17,7 @@ pub fn instruct(flag: &str) {
     }
 }
 
-async fn example() -> Result<(), Box<dyn Error>> {
+async fn example() -> Result<()> {
     agent_post_data(URI.to_string(), json!({
         "action": "agent",
         "version": AGENT_VERSION,
