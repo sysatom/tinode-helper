@@ -1,4 +1,4 @@
-name: 'test-on-commit'
+name: 'build'
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test-tauri:
+  build-tauri:
     strategy:
       fail-fast: false
       matrix:

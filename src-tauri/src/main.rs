@@ -8,11 +8,15 @@ mod scheduler;
 mod agent;
 mod instruct;
 mod logger;
+mod ctx;
 
-use tauri::Manager;
+use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
+use tauri::{ClipboardManager, Manager};
 use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
 use crate::agent::anki;
 use log::info;
+use crate::ctx::AppCtx;
 use crate::logger::init_logger;
 
 
@@ -87,12 +91,22 @@ fn main() {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
 
+            app.clipboard_manager();
+            let t = app.handle().clipboard_manager().read_text().unwrap().unwrap();
+            info!("clipboard_manager {}", t);
+
             // cron
             tauri::async_runtime::spawn(async move {
                 anki::do_something().await;
             });
             tauri::async_runtime::spawn(async move {
                 instruct::pull().await;
+            });
+
+            let app_arc = Arc::new(AppCtx::new("path".into()));
+            let app_clone = app_arc.clone();
+            tauri::async_runtime::spawn(async move {
+                println!("async clipboard {}", app_clone.get_clipboard().await);
             });
 
             Ok(())
