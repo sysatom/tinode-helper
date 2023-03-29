@@ -3,26 +3,33 @@
    windows_subsystem = "windows"
 )]
 
+use std::process::exit;
+use std::sync::{Arc};
+use tauri::{ClipboardManager, Manager};
+use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use crate::agent::anki;
+use log::{error, info};
+use crate::ctx::AppCtx;
+use crate::logger::init_logger;
+use crate::util::server;
+
 mod cmd;
 mod scheduler;
 mod agent;
 mod instruct;
 mod logger;
 mod ctx;
-
-use std::cell::RefCell;
-use std::sync::{Arc, Mutex};
-use tauri::{ClipboardManager, Manager};
-use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
-use crate::agent::anki;
-use log::info;
-use crate::ctx::AppCtx;
-use crate::logger::init_logger;
-
+mod util;
 
 fn main() {
     // log
     init_logger();
+
+    // check singleton
+    if server::check_singleton().is_err() {
+        error!("app exists");
+        exit(1);
+    }
 
     info!("starting app ...");
 
@@ -88,6 +95,9 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![cmd::set_review_count, cmd::get_store_path])
         .setup(|app| {
+            // embed server for check
+            server::embed_server(app.handle());
+
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
 
