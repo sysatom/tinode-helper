@@ -96,11 +96,17 @@ fn main() {
             info!("clipboard_manager {}", t);
 
             // cron
+            tauri::async_runtime::spawn(async {
+                scheduler::setup().await.unwrap();
+            });
             tauri::async_runtime::spawn(async move {
                 anki::do_something().await;
             });
             tauri::async_runtime::spawn(async move {
                 instruct::pull().await;
+            });
+            tauri::async_runtime::spawn(async {
+               anki::example().await.unwrap();
             });
 
             let app_arc = Arc::new(AppCtx::new("path".into()));

@@ -5,34 +5,15 @@ use std::time::Duration;
 use log::{error, info};
 use serde::{Deserialize};
 use serde_json::{json, Value};
-use tokio_cron_scheduler::{Job, JobScheduler};
 use crate::agent::{agent_post_data, URI, AGENT_VERSION};
 use anyhow::{anyhow, Result};
-
+use delay_timer::prelude::*;
+use delay_timer::timer::timer_core::Timer;
 
 pub const NAME: &str = "anki";
 
 const API_VERSION: i32 = 6;
 const API_URI: &str = "http://127.0.0.1:8765";
-
-pub async fn run() {
-    let sched = JobScheduler::new().await;
-    let sched = sched.unwrap();
-
-    let job = Job::new_async("1/5 * * * * *", |_, _| {
-        Box::pin(async {
-            if let Err(err) = stats().await {
-                error!("job run: {}", err);
-            }
-        })
-    }).unwrap();
-    sched.add(job).await.unwrap();
-
-    let start = sched.start().await;
-    if start.is_err() {
-        error!("scheduler start error");
-    }
-}
 
 pub async fn do_something() {
     info!("do_something starting");
@@ -42,6 +23,28 @@ pub async fn do_something() {
         }
         thread::sleep(Duration::from_secs(5));
     }
+}
+
+pub async fn example() -> Result<()> {
+    let delay_timer = DelayTimerBuilder::default().build();
+    delay_timer.insert_task(build_task_async_print()?)?;
+    Ok(())
+}
+
+fn build_task_async_print() -> Result<Task, TaskError> {
+    let mut task_builder = TaskBuilder::default();
+    let body = || async {
+        info!("create async fn body");
+
+        thread::sleep(Duration::from_secs(3));
+
+        info!("create async body success");
+    };
+
+    task_builder
+        .set_task_id(1)
+        .set_frequency_repeated_by_cron_str("@secondly")
+        .spawn_async_routine(body)
 }
 
 pub fn instruct(flag: &str) {
