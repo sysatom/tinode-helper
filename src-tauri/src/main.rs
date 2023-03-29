@@ -20,6 +20,7 @@ mod instruct;
 mod logger;
 mod ctx;
 mod util;
+mod resolve;
 
 fn main() {
     // log
@@ -38,7 +39,7 @@ fn main() {
     let system_tray = SystemTray::new()
         .with_menu(tray_menu);
 
-    tauri::Builder::default()
+    let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::default().build())
         .system_tray(system_tray)
         .on_system_tray_event(move |app, event| match event {
@@ -93,46 +94,23 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![cmd::set_review_count, cmd::get_store_path])
+        .invoke_handler(tauri::generate_handler![
+            cmd::set_review_count,
+            cmd::get_store_path,
+        ])
         .setup(|app| {
-            // embed server for check
-            server::embed_server(app.handle());
-
-            let window = app.get_window("main").unwrap();
-            window.set_always_on_top(true).unwrap();
-
-            app.clipboard_manager();
-            let t = app.handle().clipboard_manager().read_text().unwrap().unwrap();
-            info!("clipboard_manager {}", t);
-
-            // cron
-            tauri::async_runtime::spawn(async {
-                scheduler::setup().await.unwrap();
-            });
-            tauri::async_runtime::spawn(async move {
-                anki::do_something().await;
-            });
-            tauri::async_runtime::spawn(async move {
-                instruct::pull().await;
-            });
-            tauri::async_runtime::spawn(async {
-               anki::example().await.unwrap();
-            });
-
-            let app_arc = Arc::new(AppCtx::new("path".into()));
-            let app_clone = app_arc.clone();
-            tauri::async_runtime::spawn(async move {
-                println!("async clipboard {}", app_clone.get_clipboard().await);
-            });
-
+            resolve::resolve_setup(app);
             Ok(())
-        })
+        });
+
+    let app = builder
         .build(tauri::generate_context!())
-        .expect("error while running tauri application")
-        .run(|_app_handle, event| match event {
+        .expect("error while running tauri application");
+
+    app.run(|_app_handle, event| match event {
             tauri::RunEvent::ExitRequested { api, .. } => {
                 api.prevent_exit();
             }
             _ => {}
-        })
+        });
 }
