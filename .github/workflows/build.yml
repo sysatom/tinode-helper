@@ -26,7 +26,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
-      - name: Set up cache
+      - name: Set up npm cache
+        uses: actions/cache@v3
+        continue-on-error: false
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-npm-
+      - name: Set up cargo cache
         uses: actions/cache@v3
         continue-on-error: false
         with:
