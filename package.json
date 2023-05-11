@@ -24,7 +24,7 @@
     "tauri-plugin-store-api": "https://github.com/tauri-apps/tauri-plugin-store"
   },
   "devDependencies": {
-    "@svgr/webpack": "^6.5.1",
+    "@svgr/webpack": "^8.0.1",
     "@tauri-apps/cli": "^1.2.2",
     "@types/node": "^18.7.11",
     "@types/react": "^18.0.35",
