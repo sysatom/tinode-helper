@@ -1930,17 +1930,6 @@ dependencies = [
 
 [[package]]
 name = "json-patch"
-version = "0.2.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eb3fa5a61630976fc4c353c70297f2e93f1930e3ccee574d59d618ccbd5154ce"
-dependencies = [
- "serde",
- "serde_json",
- "treediff 3.0.2",
-]
-
-[[package]]
-name = "json-patch"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f54898088ccb91df1b492cc80029a6fdf1c48ca0db7c6822a8babad69c94658"
@@ -1948,7 +1937,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
- "treediff 4.0.2",
+ "treediff",
 ]
 
 [[package]]
@@ -3317,18 +3306,18 @@ checksum = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
 
 [[package]]
 name = "serde"
-version = "1.0.162"
+version = "1.0.163"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71b2f6e1ab5c2b98c05f0f35b236b22e8df7ead6ffbf51d7808da7f8817e7ab6"
+checksum = "2113ab51b87a539ae008b5c6c02dc020ffa39afd2d83cffcb3f4eb2722cebec2"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.162"
+version = "1.0.163"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2a0814352fd64b58489904a44ea8d90cb1a91dcb6b4f5ebabc32c8318e93cb6"
+checksum = "8c805777e3930c8883389c602315a24224bcc738b63905ef87cd1420353ea93e"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3391,7 +3380,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with_macros",
- "time 0.3.20",
+ "time 0.3.15",
 ]
 
 [[package]]
@@ -3848,7 +3837,7 @@ dependencies = [
  "anyhow",
  "cargo_toml",
  "heck 0.4.1",
- "json-patch 1.0.0",
+ "json-patch",
  "semver 1.0.17",
  "serde",
  "serde_json",
@@ -3866,7 +3855,7 @@ dependencies = [
  "base64 0.21.0",
  "brotli",
  "ico",
- "json-patch 1.0.0",
+ "json-patch",
  "plist",
  "png",
  "proc-macro2",
@@ -3878,7 +3867,7 @@ dependencies = [
  "sha2",
  "tauri-utils",
  "thiserror",
- "time 0.3.20",
+ "time 0.3.15",
  "uuid",
  "walkdir",
 ]
@@ -3943,7 +3932,6 @@ dependencies = [
  "raw-window-handle",
  "tauri-runtime",
  "tauri-utils",
- "url",
  "uuid",
  "webkit2gtk",
  "webview2-com",
@@ -3963,7 +3951,7 @@ dependencies = [
  "heck 0.4.1",
  "html5ever",
  "infer",
- "json-patch 1.0.0",
+ "json-patch",
  "kuchiki",
  "memchr",
  "phf 0.10.1",
@@ -4326,15 +4314,6 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
-]
-
-[[package]]
-name = "treediff"
-version = "3.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "761e8d5ad7ce14bb82b7e61ccc0ca961005a275a060b9644a2431aa11553c2ff"
-dependencies = [
- "serde_json",
 ]
 
 [[package]]
